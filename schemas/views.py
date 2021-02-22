@@ -10,11 +10,17 @@ from .models import Table
 
 
 class TableViewSet(viewsets.ModelViewSet):
+    """
+    This viewset represents the CRUD and extra actions for SQL Simulation
+    """
     queryset = Table.objects.all()
-    serializer_class = TableSerializer
+    serializer_class = TableSchemaSerializer
     authentication_classes = []
 
     def create(self, request, *args, **kwargs):
+        """
+        Creates a new table with attributes
+        """
         serializer = TableSchemaSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -25,11 +31,17 @@ class TableViewSet(viewsets.ModelViewSet):
             headers=headers)
 
     def destroy(self, request, pk):
+        """
+        Deletes a table an all it's attributes
+        """
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def list(self, request, *args, **kwargs):
+        """
+        List and filter tables, queryparams are allowed
+        """
         query_params = request.query_params
 
         if query_params:
@@ -39,23 +51,25 @@ class TableViewSet(viewsets.ModelViewSet):
 
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = self.get_serializer(page, many=True)
+            serializer = TableSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(queryset, many=True)
+        serializer = TableSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieves one table by id
+        """
         instance = self.get_object()
-        serializer = self.get_serializer(instance)
+        serializer = TableSerializer(instance)
         return Response(serializer.data)
-
-    def partial_update(self, request, *args, **kwargs):
-        kwargs['partial'] = True
-        return self.update(request, *args, **kwargs)
 
     @action(detail=True, methods=['get'])
     def get_schema(self, request, pk=None):
+        """
+        Retrieves table's schema by id
+        """
         try:
             table = Table.objects.get(pk=1)
             serializer = TableSchemaSerializer(table)
@@ -65,6 +79,9 @@ class TableViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def insert_data(self, request, pk=None):
+        """
+        Inserts data into the attributes of an existing table
+        """
         try:
             table = Table.objects.get(pk=int(pk))
             Table.objects.insert_data(table.pk, request.data)

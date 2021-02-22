@@ -17,7 +17,7 @@ class AttributeSerializer(serializers.ModelSerializer):
 class TableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Table
-        fields = ('name')
+        fields = ('name', )
 
     def to_representation(self, instance):
         attrs_qs = instance.table_attrs.all()
