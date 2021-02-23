@@ -104,7 +104,7 @@ class TableTests(APITestCase):
         data = {}
         response = self.client.get(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(dummy_tables), len(response.data))
+        self.assertEqual(len(dummy_tables), response.data['count'])
 
     def test_table_list_filtered_tables(self):
         dummy_tables = TableFactory.create_batch(5)
@@ -125,10 +125,15 @@ class TableTests(APITestCase):
             value=8.5)
         query_params = f'?title={dummy_attr2.value}'
         url = reverse('table-list') + query_params
-        expected_data = [TableSerializer(dummy_tables[2]).data]
+        expected_data = {
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "results": [TableSerializer(dummy_tables[2]).data]
+        }
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(1, len(response.data))
+        self.assertEqual(1, response.data['count'])
         self.assertEqual(response.data, expected_data)
 
     def test_table_delete(self):

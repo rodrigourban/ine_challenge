@@ -38,7 +38,7 @@ class TableManager(models.Manager):
             table=table_id, required=True).values_list('name')
         self.validate_required(required_attrs, attribute_list)
         for key, value in attribute_list.items():
-            attribute = Attribute.objects.get(name=key)
+            attribute = Attribute.objects.get(name=key, table=table_id)
             attribute.value = value
             attribute.save()
 

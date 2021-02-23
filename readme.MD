@@ -8,23 +8,29 @@ The implementation is up to developer.
 ```sh
 $  pip install -r requirements/local.txt
 ```
+
 #### Migrations
 
 ```sh
 $ python manage.py makemigrations
 ```
+
 ```sh
 $ python manage.py migrate
 ```
+
 ```sh
 $ python manage.py runserver
 ```
 
 **If you need to runserver in a specific port**
+
 ```sh
 $ python manage.py runserver localhost:9000
 ```
+
 #### Create Super User
+
 ```sh
 $ python manage.py createsuperuser
 ```
@@ -32,9 +38,11 @@ $ python manage.py createsuperuser
 ## Endpoints
 
 **Create table:**
+
 - METHOD: POST
-- URL: server:port/api/table
+- URL: server:port/api/table/
 - Payload:
+
 ```
 {
     "name": "movies",
@@ -42,48 +50,53 @@ $ python manage.py createsuperuser
         {
             "name": "title",
             "attr_type": "str",
-            "unique": True,
-            "required": True
+            "unique": true,
+            "required": true
         },
         {
             "name": "genre",
-            "attr_type": "str",
+            "attr_type": "str"
         },
         {
             "name": "release_date",
-            "attr_type": "datetime",
-        },
+            "attr_type": "datetime"
+        }
     ]
 }
 ```
 
 **Delete table:**
+
 - METHOD: DELETE
 - URL: server:port/api/table/id
 
 **Get table schema:**
+
 - METHOD: GET
-- URL: server:port/api/tables/id/get_schema
+- URL: server:port/api/tables/id/get_schema/
 
 **Get one table:**
+
 - METHOD: GET
 - URL: server:port/api/table/id
 
+**Get table list:**
 
-**Get table list:** 
 - METHOD: GET
 - URL: server:port/table/
 - Query params (optional for filtering):
+
 ```
 Can filter by attribute value.
 Ex. ?title=Die Hard
 ```
 
-
 **Insert data into table:**
+
 - METHOD: POST
-- URL: server:port/api/tables/id/insert_data
+- URL: server:port/api/tables/id/insert_data/
 - Payload:
+
 ```
 {
     "title": "Inception",
